@@ -8,7 +8,7 @@ Using OpenWeather API, create a weather dashboard that allows the user to view c
 
 ### Deployed Link:
 
-https://sr70079.github.io/homework6/
+https://sr70079.github.io/Weather-Dashboard/
 
 ### Screenshots of Webpage: 
 
