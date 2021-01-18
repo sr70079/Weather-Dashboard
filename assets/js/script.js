@@ -2,12 +2,14 @@ $(document).ready(function() {
 
     // This is our API key
     var APIKey = "a789e74543ab2eb315de8d5bcab5a0b9";
-    var lon = 0.0;
-    var lat = 0.0;
+    var currentTime = new Date();
 
-    var createCity = function(response, cityName) {
+    var createCity = function(response, cityName, weatherIcon) {
         var div = $("<div>");
-        var cityEl = $("<h3>").text(cityName)
+        var iconUrl = "http://openweathermap.org/img/wn/" + weatherIcon + ".png"
+        var icon = $("<img>").attr("src", iconUrl);
+        var cityEl = $("<h3>").text(cityName + "(" + currentTime.toLocaleDateString("en-US") + ")")
+        cityEl.append(icon);
         var windP = $("<p>").text("Wind Speed: " + response.current.wind_speed);
         var humidityP = $("<p>").text("Humidity: " + response.current.humidity);
         var uvP = $("<p>").text("UV Index: " + response.current.uvi)
@@ -26,18 +28,18 @@ $(document).ready(function() {
 
         for (i = 0; i < 5; i++) {
             
-        var iconUrl = "http://openweathermap.org/img/wn/" + response.daily[i].weather[0].icon + ".png"
-       
-        var div = $("<div class='col-sm-2 forecast-day'>");
-        var date = $("<p>").text()
-        var icon = $("<img>").attr("src", iconUrl);
-        var tempF = (response.daily[i].temp.day - 273.15) * 1.80 + 32;
-        var temp = $("<p>").text("Temp: " + tempF.toFixed(2));
-        var hum = $("<p>").text("Humidity: " + response.daily[i].humidity);        
+            var iconUrl = "http://openweathermap.org/img/wn/" + response.daily[i].weather[0].icon + ".png"
+        
+            var div = $("<div class='col-sm-2 forecast-day'>");
+            var date = $("<p>").text(currentTime.addDays(i+1).toLocaleDateString("en-US"));
+            var icon = $("<img>").attr("src", iconUrl);
+            var tempF = (response.daily[i].temp.day - 273.15) * 1.80 + 32;
+            var temp = $("<p>").text("Temp: " + tempF.toFixed(2));
+            var hum = $("<p>").text("Humidity: " + response.daily[i].humidity);        
 
-        div.append(date, icon, temp, hum);
+            div.append(date, icon, temp, hum);
 
-        $("#5-day-forecast").append(div);
+            $("#5-day-forecast").append(div);
 
         }       
         
@@ -71,7 +73,7 @@ $(document).ready(function() {
                 console.log(response.name)
                 console.log(oneCallResponse);
                 
-                createCity(oneCallResponse, response.name);
+                createCity(oneCallResponse, response.name, response.weather[0].icon);
 
             });
         });
@@ -80,4 +82,10 @@ $(document).ready(function() {
     $("#search").on("click", function() {
         searchCity($("#city-search").val().trim());
     });
+
+    Date.prototype.addDays = function(days) {
+        var date = new Date(this.valueOf());
+        date.setDate(date.getDate() + days);
+        return date;
+    }
 });

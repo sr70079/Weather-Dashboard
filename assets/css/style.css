@@ -34,3 +34,11 @@ input[type=text] {
     color: white;
     padding: 2px;
 }
+
+#main
+{
+    background-color: #fff;
+    border: 2px solid;
+    margin: 5px;
+    padding: 2px;
+}
