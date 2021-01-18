@@ -3,6 +3,8 @@ $(document).ready(function() {
     // This is our API key
     var APIKey = "a789e74543ab2eb315de8d5bcab5a0b9";
     var currentTime = new Date();
+    var citiesSearched = [];
+
 
     var createCity = function(response, cityName, weatherIcon) {
         var div = $("<div>");
@@ -25,6 +27,8 @@ $(document).ready(function() {
     };
 
     var createForecast = function(response) {
+
+        $("#5-day-forecast").empty();
 
         for (i = 0; i < 5; i++) {
             
@@ -75,6 +79,10 @@ $(document).ready(function() {
                 
                 createCity(oneCallResponse, response.name, response.weather[0].icon);
 
+                citiesSearched.unshift(response.name)
+
+                localStorage.setItem("citiesSearched", JSON.stringify(citiesSearched));  
+
             });
         });
     };
@@ -88,4 +96,29 @@ $(document).ready(function() {
         date.setDate(date.getDate() + days);
         return date;
     }
+
+    var callCity = function () {
+        citiesSearched = JSON.parse(localStorage.getItem("citiesSearched")) ?? [];
+        if (citiesSearched.length>0) {
+            searchCity(citiesSearched[0]);
+        };
+    };
+
+    var displayCities = function() {
+
+        var div = $("<div>");
+       
+        for (i = 0; i < citiesSearched.length; i++) {
+            var newSearch = $("<div>");
+            newSearch.text(citiesSearched[i]); 
+            div.append(newSearch);
+        };       
+
+        $("#city-storage").append(div);
+
+    };   
+
+    callCity();
+
+    displayCities();
 });
