@@ -5,19 +5,42 @@ $(document).ready(function() {
     var lon = 0.0;
     var lat = 0.0;
 
-    var createLi = function(response) {
-        var ul = $("<ul>");
-        var cityLi = $("<li>").text(response.name)
-        var windLi = $("<li>").text("Wind Speed: " + response.wind.speed);
-        var humidityLi = $("<li>").text("Humidity: " + response.main.humidity);
-        // var uvLi = $("<li>").text("UV Index: " + response.) need to find uv index
+    var createCity = function(response, cityName) {
+        var div = $("<div>");
+        var cityEl = $("<h3>").text(cityName)
+        var windP = $("<p>").text("Wind Speed: " + response.current.wind_speed);
+        var humidityP = $("<p>").text("Humidity: " + response.current.humidity);
+        var uvP = $("<p>").text("UV Index: " + response.current.uvi)
         
-        var tempF = (response.main.temp - 273.15) * 1.80 + 32;
-        var tempLi = $("<li>").text("Temperature (F) " + tempF.toFixed(2));
+        var tempF = (response.current.temp - 273.15) * 1.80 + 32;
+        var tempP = $("<p>").text("Temperature (F) " + tempF.toFixed(2));
 
-        ul.append(cityLi, windLi, humidityLi, tempLi)
+        div.append(cityEl, windP, humidityP, tempP, uvP)
 
-        $("#main").append(ul);
+        $("#main").html(div);
+
+        createForecast(response)
+    };
+
+    var createForecast = function(response) {
+
+        for (i = 0; i < 5; i++) {
+            
+        var iconUrl = "http://openweathermap.org/img/wn/" + response.daily[i].weather[0].icon + ".png"
+       
+        var div = $("<div>");
+        var date = $("<p>").text()
+        var icon = $("<img>").attr("src", iconUrl);
+        var tempF = (response.daily[i].temp.day - 273.15) * 1.80 + 32;
+        var temp = $("<p>").text(tempF.toFixed(2));
+        var hum = $("<p>").text(response.daily[i].humidity);        
+
+        div.append(date, icon, temp, hum);
+
+        $("#5-day-forecast").html(div);
+
+        }       
+        
     };
 
     var searchCity = function(city) {
@@ -34,28 +57,9 @@ $(document).ready(function() {
             // Log the resulting object
             console.log(response);
 
-            createLi(response);
-
             
-            // Transfer content to HTML
-            // $(".city").html("<h1>" + response.name + " Weather Details</h1>");
-            // $(".wind").text("Wind Speed: " + response.wind.speed);
-            // $(".humidity").text("Humidity: " + response.main.humidity);
-            //$(."uv").text("UV Index: " + response.) need to find uv index
-            
-            // Convert the temp to fahrenheit
-            var tempF = (response.main.temp - 273.15) * 1.80 + 32;
 
-            // add temp content to html
-            // $(".temp").text("Temperature (K) " + response.main.temp);
-            // $(".tempF").text("Temperature (F) " + tempF.toFixed(2));
-
-            // Log the data in the console as well
-            console.log("Wind Speed: " + response.wind.speed);
-            console.log("Humidity: " + response.main.humidity);
-            console.log("Temperature (F): " + tempF);
-
-            var oneCallQueryUrl = "https://api.openweathermap.org/data/2.5/onecall?lon=" + response.lon + "&lat=" + response.lat + "&appid=" + APIKey;
+            var oneCallQueryUrl = "https://api.openweathermap.org/data/2.5/onecall?lon=" + response.coord.lon + "&lat=" + response.coord.lat + "&appid=" + APIKey;
 
             // Here we run our AJAX call to the OpenWeatherMap API
             $.ajax({
@@ -63,8 +67,12 @@ $(document).ready(function() {
                 method: "GET"
             })
             // We store all of the retrieved data inside of an object called "response"
-            .then(function(response) {
-                console.log(response);
+            .then(function(oneCallResponse) {
+                console.log(response.name)
+                console.log(oneCallResponse);
+                
+                createCity(oneCallResponse, response.name);
+
             });
         });
     };
