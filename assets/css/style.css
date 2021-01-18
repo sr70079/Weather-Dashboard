@@ -27,3 +27,10 @@ input[type=text],.search-container button {
 input[type=text] {
     border: 1px solid #ccc;  
   }
+
+.forecast-day {
+    background-color: blue;
+    margin: 5px;
+    color: white;
+    padding: 2px;
+}

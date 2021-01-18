@@ -28,16 +28,16 @@ $(document).ready(function() {
             
         var iconUrl = "http://openweathermap.org/img/wn/" + response.daily[i].weather[0].icon + ".png"
        
-        var div = $("<div>");
+        var div = $("<div class='col-sm-2 forecast-day'>");
         var date = $("<p>").text()
         var icon = $("<img>").attr("src", iconUrl);
         var tempF = (response.daily[i].temp.day - 273.15) * 1.80 + 32;
-        var temp = $("<p>").text(tempF.toFixed(2));
-        var hum = $("<p>").text(response.daily[i].humidity);        
+        var temp = $("<p>").text("Temp: " + tempF.toFixed(2));
+        var hum = $("<p>").text("Humidity: " + response.daily[i].humidity);        
 
         div.append(date, icon, temp, hum);
 
-        $("#5-day-forecast").html(div);
+        $("#5-day-forecast").append(div);
 
         }       
         
