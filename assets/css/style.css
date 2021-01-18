@@ -10,7 +10,7 @@ Header {
 .search {
     background-color: #f1f1f1;
     height: 100%;
-  }
+}
 
 .row.content {
     height: 550px;
@@ -20,13 +20,11 @@ input[type=text],.search-container button {
     float: none;
     display: inline;
     text-align: left;
-    /* width: 100%; */
-    /* margin: 0; */
-  }
+}
 
 input[type=text] {
     border: 1px solid #ccc;  
-  }
+}
 
 .forecast-day {
     background-color: blue;
@@ -35,10 +33,32 @@ input[type=text] {
     padding: 2px;
 }
 
-#main
-{
+#main {
     background-color: #fff;
     border: 2px solid;
     margin: 5px;
     padding: 5px;
+}
+
+.new-search {
+    background-color: #fff;
+    border: 2px solid;
+    margin: 5px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.green {
+    background-color: green;
+    padding: 5px
+}
+
+.yellow {
+    background-color: yellow;
+    padding: 5px
+}
+
+.red {
+    background-color: red;
+    padding: 5px
 }
